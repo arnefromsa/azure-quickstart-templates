@@ -255,19 +255,9 @@
             }
           },
           "variables": {
-            "nicName": "[format('{0}Nic', parameters('virtualMachineName'))]",
-            "publicIPAddressName": "[format('{0}-ip', parameters('virtualMachineName'))]"
+            "nicName": "[format('{0}Nic', parameters('virtualMachineName'))]"
           },
           "resources": [
-            {
-              "type": "Microsoft.Network/publicIPAddresses",
-              "apiVersion": "2022-05-01",
-              "name": "[variables('publicIPAddressName')]",
-              "location": "[parameters('existingVnetLocation')]",
-              "properties": {
-                "publicIPAllocationMethod": "Dynamic"
-              }
-            },
             {
               "type": "Microsoft.Network/networkInterfaces",
               "apiVersion": "2022-05-01",
@@ -279,9 +269,6 @@
                     "name": "ipconfig1",
                     "properties": {
                       "privateIPAllocationMethod": "Dynamic",
-                      "publicIPAddress": {
-                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"
-                      },
                       "subnet": {
                         "id": "[parameters('subnetId')]"
                       }
@@ -291,10 +278,7 @@
                 "networkSecurityGroup": {
                   "id": "[parameters('nsgId')]"
                 }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"
-              ]
+              }
             },
             {
               "type": "Microsoft.Compute/virtualMachines",
